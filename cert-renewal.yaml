@@ -1,0 +1,15 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cert-renewal
+spec:
+  schedule: "0 0 1 * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cert-renewal
+            image: certbot/certbot
+            args: ["renew", "--quiet"]
+          restartPolicy: OnFailure

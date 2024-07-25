@@ -1,0 +1,15 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: log-cleanup
+spec:
+  schedule: "0 1 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: log-cleanup
+            image: busybox
+            command: ["/bin/sh", "-c", "find /var/log -type f -mtime +10 -delete"]
+          restartPolicy: OnFailure

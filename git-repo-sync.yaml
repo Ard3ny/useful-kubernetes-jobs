@@ -1,0 +1,23 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: git-repo-sync
+spec:
+  schedule: "*/30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: git-sync
+            image: alpine/git
+            args: ["pull", "origin", "main"]
+            workingDir: "/git-repository"
+            volumeMounts:
+            - name: git-volume
+              mountPath: "/git-repository"
+          volumes:
+          - name: git-volume
+            hostPath:
+              path: "/path/to/local/git/repository"
+          restartPolicy: OnFailure

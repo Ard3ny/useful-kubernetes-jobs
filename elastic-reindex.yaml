@@ -1,0 +1,15 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: elasticsearch-reindex
+spec:
+  schedule: "0 3 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: reindex
+            image: elasticsearch:latest
+            command: ["curl", "-X", "POST", "http://elasticsearch-cluster:9200/_reindex"]
+          restartPolicy: OnFailure
